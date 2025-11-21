@@ -1,97 +1,98 @@
 ---
 title: "Introduction"
-description: "Welcome to the new home for your documentation"
+description: "This is the documentation for VIQ  an investment application that enables two main features
+1.) Creation of index fund like portfolios for investment  2.) Looping strategies wherein a user may utilize their crypto assets to borrow and reborrow assets"
 ---
 
 ## Setting up
 
-Get your documentation site up and running in minutes.
+How to setup each project and run locally
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
+<Card title="VIQ marketing website" icon="sparkles" cta="https://github.com/FOREProtocol/viq-landing-site">
+  
 </Card>
 
-## Make it yours
+<Card title="VIQ admin frontend" icon="sparkles" cta="https://github.com/FOREProtocol/viq-client">
+  
+</Card>
 
-Design a docs site that looks great and empowers your users.
+<Card title="VIQ user frontend" icon="sparkles" cta="https://github.com/FOREProtocol/viq-frontend">
+  
+</Card>
 
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
-  </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
-  </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
+<Card title="VIQ backend API server" icon="sparkles" cta="https://github.com/FOREProtocol/viq-main-api">
+  
+</Card>
+
+## Sytem overview
+
+![Viq Drawio Pn](/images/viq.drawio.png)
+
+The system is composed of multiple repositories and components that work together to deliver the user and admin experiences, while interacting with the underlying blockchain via smart contracts. Below is a detailed breakdown of the system's components and their interactions:
+
+#### **Repositories:**
+
+1. `viq-frontend`\
+   This repository contains the code for the **user-facing application**, which is built with **Next.js**. It provides the user interface for interacting with the system.
+2. `viq-client`\
+   The **admin frontend** is housed in this repository. It provides a dedicated interface for administrators to manage and monitor the platform. This is built using **Vite**
+3. `viq-main-api`\
+   This repository houses the **main API** that serves as the middle layer between the frontend applications (both user and admin) and the underlying backend systems. It is responsible for querying the PostgreSQL database and performing specific write operations, such as registering new users when a wallet connects to the application. This is built using **Fastify** framework.
+4. `viq-contracts`\
+   This repository contains the **smart contracts** used by the platform. Actions, such as transactions or data updates, are carried out via direct interactions with these contracts.
+5. `viq-indexer`\
+   The **indexer** listens for changes in the smart contracts (via events emitted by `viq-contracts`) and updates the **PostgreSQL database** accordingly. It ensures the database is synchronized with the blockchain.
+6. `viq-landing site`
+
+   Written in **nextjs**. Marketing website
+
+#### **System Workflow:**
+
+1. **Frontend (User and Admin Apps)**
+   - Both the **user app** (`viq-frontend`) and the **admin app** (`viq-client`) interact with the **backend API** (`viq-main-api`) to fetch data.
+   - Data from the API is queried from the **PostgreSQL database**, which is kept up-to-date by the **viq-indexer**.
+2. **Smart Contract Interaction**
+   - Most user actions (such as transactions, updates, or operations) are performed directly through **smart contract calls** to `viq-contracts`.
+   - When a **successful contract call** occurs, an **event is emitted** by the smart contract.
+3. **Indexing and Data Sync**
+   - The **viq-indexer** listens for these contract events and processes them. It then writes the relevant data to the **PostgreSQL database** hosted on Simon's server.
+4. **Main API Interaction**
+   - The **viq-main-api** primarily queries the **PostgreSQL database** for the latest data written by the indexer.
+   - The only exception to this is when a **new wallet** connects to the application. In this case, the **viq-main-api** registers the wallet as a new **user** by performing a write operation.
+5. **Database (PostgreSQL)**
+   - The database is the **central data store** where all user-related data, transaction details, and contract state are stored.
+   - It is continuously updated by the **viq-indexer**, ensuring consistency with the blockchain data.
+
+#### **Data Flow Summary:**
+
+1. **User & Admin Apps** → Interact with the **viq-main-api** to fetch data.
+2. **viq-main-api** → Queries the **PostgreSQL database** for data.
+3. **Smart Contract Calls** → User actions trigger direct calls to **viq-contracts** (smart contracts).
+4. **Event Emission** → Successful contract calls emit events.
+5. **viq-indexer** → Listens to the contract events and updates the **PostgreSQL database**.
+6. **PostgreSQL Database** → Stores data and is queried by the **viq-main-api**.
 
 ## Create beautiful pages
 
 Everything you need to create world-class documentation.
 
 <Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
+  <Card title="Write with MDX" icon="pen-fancy" href="/essentials/markdown">
     Use MDX to style your docs pages.
   </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
+  <Card title="Code samples" icon="code" href="/essentials/code">
     Add sample code to demonstrate how to use your product.
   </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
+  <Card title="Images" icon="image" href="/essentials/images">
     Display images and other media.
   </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
+  <Card title="Reusable snippets" icon="recycle" href="/essentials/reusable-snippets">
     Write once and reuse across your docs.
   </Card>
 </Columns>
 
 ## Need inspiration?
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
+<Card title="See complete examples" icon="stars" href="https://mintlify.com/customers">
   Browse our showcase of exceptional documentation sites.
 </Card>
